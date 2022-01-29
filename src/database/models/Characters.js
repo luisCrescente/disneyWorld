@@ -31,7 +31,7 @@ module.exports = function (sequelize, dataTypes) {
 
     let config = {
         tableName:'characters',
-        tiemestamps: false,
+        timestamps: false,
     };
 
     let Characters = sequelize.define(alias, cols, config);

@@ -12,16 +12,19 @@ app.use(
     express.static(path.resolve(__dirname, '../public'))
     );
     
-    
-/* configuración de views ejs */
-    
-    app.set('view engine', 'ejs');
-    app.set('views', path.resolve(__dirname, 'views'));
-    
-/* test */
-    
-    const main = require('./routers/test');
-    app.use('/',main);
+app.use(express.urlencoded({ extended: false}));
+app.use(express.json());
+
+    /* rutas APIs */
+
+    const moviesRoutes = require('./routes/movies');
+    const charactersRoutes = require('../src/routes/characters');
+    const genresRoutes = require('../src/routes/genres'); 
+
+    app.use('/movies', moviesRoutes);
+    app.use('/characters',charactersRoutes);
+    app.use('/genres',genresRoutes);
+
 
 /* configuración del puerto*/
 

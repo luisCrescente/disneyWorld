@@ -2,9 +2,9 @@ let db = require('../database/models')
 const path = require('path');
 const fs = require('fs');
 
-let mainController = {
+let moviesController = {
 
-    index: function(req,res){
+    list: function(req,res){
         db.Genre.findAll()
         .then(function(genre){
             return res.render('home',{genre})
@@ -13,4 +13,4 @@ let mainController = {
 
 }
 
-module.exports = mainController;
+module.exports = moviesController;
