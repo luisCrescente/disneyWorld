@@ -4,12 +4,20 @@ const fs = require('fs');
 
 let moviesController = {
 
-    list: function(req,res){
-        db.Genre.findAll()
-        .then(function(genre){
-            return res.render('home',{genre})
-        })
-     }
+    list:(req,res) =>{
+        db.Movies
+        .findAll()
+       .then(movies => {
+           return res.status(200).json({
+               total: movies.length,
+               status:200,
+               
+           })
+       }).catch(function(err){
+
+           console.log(err);
+       })
+    }
 
 }
 
