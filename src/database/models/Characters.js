@@ -1,38 +1,32 @@
 module.exports = function (sequelize, dataTypes) {
     let alias ='Characters';
-    let cols ={
-        id: {
 
-            type: dataTypes.INTERGER,
+    let cols = {
+        id:{
+            type: dataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        
-        name: {
 
-        type: dataTypes.STRING,
+        name:{
+            type: dataTypes.STRING
         },
 
-        age: {
-
-            type: dataTypes.INTERGER,
+        image:{
+            type: dataTypes.STRING
         },
 
-        image: {
-
-            type: dataTypes.STRING,
+        age:{
+            type: dataTypes.INTEGER
         },
 
-        weight: {
-
-            type: dataTypes.INTERGER,
+        weight:{
+            type: dataTypes.INTEGER
         },
 
-        history: {
-
-            dataTypes: dataTypes.STRING,
-        },
-
+        history:{
+            type: dataTypes.STRING
+        }
     };
 
     let config = {

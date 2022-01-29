@@ -2,7 +2,7 @@ module.exports = (sequelize, dataTypes)=>{
     let alias = 'Movies';
     let cols ={
         id: {
-            type: dataTypes.INTERGER,
+            type: dataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
@@ -24,7 +24,7 @@ module.exports = (sequelize, dataTypes)=>{
 
         rating: {
 
-            type: dataTypes.INTERGER,
+            type: dataTypes.INTEGER,
         },
 
         id_genre: {

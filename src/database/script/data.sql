@@ -5,9 +5,6 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema mydb
--- -----------------------------------------------------
--- -----------------------------------------------------
 -- Schema disney_world
 -- -----------------------------------------------------
 
@@ -21,35 +18,33 @@ USE `disney_world` ;
 -- Table `disney_world`.`characters`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `disney_world`.`characters` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL DEFAULT NULL,
+  `history` VARCHAR(45) NULL DEFAULT NULL,
   `image` VARCHAR(255) NULL DEFAULT NULL,
   `age` INT(11) NULL DEFAULT NULL,
   `weight` INT(11) NULL DEFAULT NULL,
-  `history` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `disney_world`.`genres`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `disney_world`.`genres` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL DEFAULT NULL,
   PRIMARY KEY (`id`))
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `disney_world`.`movies`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `disney_world`.`movies` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `title` VARCHAR(45) NULL DEFAULT NULL,
-  `image` VARCHAR(255) NULL DEFAULT NULL,
+  `image` VARCHAR(45) NULL DEFAULT NULL,
   `release_date` DATE NULL DEFAULT NULL,
   `rating` INT(11) NULL DEFAULT NULL,
   `id_genre` INT(11) NOT NULL,
@@ -60,15 +55,14 @@ CREATE TABLE IF NOT EXISTS `disney_world`.`movies` (
     REFERENCES `disney_world`.`genres` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
 -- Table `disney_world`.`character_movie`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `disney_world`.`character_movie` (
-  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `id_character` INT(11) NOT NULL,
   `id_movie` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -84,8 +78,7 @@ CREATE TABLE IF NOT EXISTS `disney_world`.`character_movie` (
     REFERENCES `disney_world`.`movies` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB
-DEFAULT CHARACTER SET = utf8;
+ENGINE = InnoDB;
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

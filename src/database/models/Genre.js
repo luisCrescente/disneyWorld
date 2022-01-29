@@ -15,8 +15,8 @@ module.exports = function (sequelize, dataTypes) {
     };
 
     let config = {
-        tableName = 'genres',
-        tiemestamps = false,
+        tableName: 'genres',
+        tiemestamps: false,
     };
 
     let Genre = sequelize.define(alias, cols, config);
