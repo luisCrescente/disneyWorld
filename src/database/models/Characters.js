@@ -32,6 +32,7 @@ module.exports = function (sequelize, dataTypes) {
     let config = {
         tableName:'characters',
         timestamps: false,
+        undercode: true
     };
 
     let Characters = sequelize.define(alias, cols, config);
@@ -41,8 +42,8 @@ module.exports = function (sequelize, dataTypes) {
             
             as:'movies',
             through:'character_movie',
-            foreingKey:'id_character',
-            otherKey:'id_movie',
+            foreignKey:'character_id',
+            otherKey:'movie_id',
             tiemestamps: false,
         })
     };

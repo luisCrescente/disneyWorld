@@ -27,8 +27,10 @@ module.exports = (sequelize, dataTypes)=>{
             type: dataTypes.INTEGER,
         },
 
-        id_genre: {
+        genre_id: {
             type: dataTypes.INTEGER,
+            allowNull:false,
+            field: 'genre_id'
         }
     };
 
@@ -42,17 +44,16 @@ module.exports = (sequelize, dataTypes)=>{
     Movies.associate = function(models){
 
         Movies.belongsTo(models.Genre, {
-            
             as:'genres',
-            foreingKey:'id_genre',
+            foreignKey:'genre_id',
         });
 
         Movies.belongsToMany(models.Characters, {
             
             as:'characters',
             through:'character_movie',
-            foreingKey:'id_movie',
-            otherKey:'id_character',
+            foreignKey:'movie_id',
+            otherKey:'character_id',
             tiemestamps: false,
         })
     

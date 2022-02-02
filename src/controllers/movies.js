@@ -1,12 +1,12 @@
 let db = require('../database/models')
 const path = require('path');
-const fs = require('fs');
+
 
 let moviesController = {
 
     list:(req,res) =>{
         db.Movies
-        .findAll()
+        .findAll({include:[{association: 'genres'}]})
        .then(movies => {
            return res.status(200).json({
                total: movies.length,
