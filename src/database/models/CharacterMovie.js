@@ -1,5 +1,5 @@
 module.exports = function (sequelize, dataTypes) {
-    let alias = 'Character_movie';
+    let alias = 'CharacterMovie';
     let cols ={
         id:{
             type: dataTypes.INTEGER,
@@ -23,21 +23,21 @@ module.exports = function (sequelize, dataTypes) {
         timesTamps: false
     };
 
-    const Character_movie = sequelize.define(alias, cols, config);
+    let CharacterMovie = sequelize.define(alias, cols, config);
 
-    Character_movie.associate = function(models){
+    CharacterMovie.associate = function(models){
 
-    Character_movie.belongsTo(models.Characters,{
+        CharacterMovie.belongsTo(models.Characters,{
         as: 'characters',
         foreignKey: 'character_id'
     }),
 
-    Character_movie.belongsTo(models.Movies,{
+    CharacterMovie.belongsTo(models.Movies,{
         as: 'movies',
         foreignKey: 'movie_id'
     })
 
         }
-        return Character_movie;
+        return CharacterMovie;
 
 }

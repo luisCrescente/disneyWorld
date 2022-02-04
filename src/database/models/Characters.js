@@ -44,7 +44,7 @@ module.exports = function (sequelize, dataTypes) {
             through:'character_movie',
             foreignKey:'character_id',
             otherKey:'movie_id',
-            tiemestamps: false,
+            timestamps: false,
         })
     };
 
