@@ -71,6 +71,40 @@ let moviesController = {
         }catch (err) {
                 console.log(err);
             };
+    },
+
+    create: (req,res) =>{
+        db.Movies
+        .create(req.body,
+        //     {
+        //     inlcude:[
+        //     {association: 'genres'},
+        //     {association:'characters'}
+        // ]}
+        )
+        .then(movie => {
+            const image = req.file;
+            console.log(image);
+            return res.status(200).json({
+                data:movie,
+                status:200,
+                created:'ok'
+            })
+        }).catch(error=>console.log(error))
+    },
+
+    delete:(req,res)=>{
+        db.Movies.destroy({
+            where: {
+                id: req.params.id
+            }
+        })
+        .then((response)=>{
+            return res.status(200).json({
+                
+            })
+        })
+
     }
 }
 
