@@ -16,18 +16,18 @@ let moviesController = {
             try {
                 getMovies = allMovies.map(movie => {  
                     movie = {
-                        id: movie.dataValues.id,
+                        //id: movie.dataValues.id,
                         title: movie.dataValues.title,
                         release_date: movie.dataValues.release_date,
-                        rating: movie.dataValues.rating,
-                        genres: movie.genres.dataValues.name,
+                        //rating: movie.dataValues.rating,
+                        //genres: movie.genres.dataValues.name,
                         //characters:characters
                         image:`http://localhost:3005/img/moviesImg/${movie.dataValues.image}`
                     };
                     return movie;
                 });
                 res.status(200).json({
-                    totalMovies: getMovies.length,
+                    //totalMovies: getMovies.length,
                     movies: getMovies,
                     status: 200,
                 });
@@ -97,8 +97,9 @@ let moviesController = {
                 id: req.params.id
             }
         })
-        .then((response)=>{
+        .then((movie)=>{
             return res.status(200).json({
+                response: movie,
                 deleted: 'pelicula borrada',
                 status:200
             });
