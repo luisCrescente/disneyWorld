@@ -74,17 +74,15 @@ let moviesController = {
     },
 
     create: (req,res) =>{
-        db.Movies
-        .create(req.body,
-        //     {
-        //     inlcude:[
-        //     {association: 'genres'},
-        //     {association:'characters'}
-        // ]}
-        )
+        db.Movies.create({
+                inlcude:[
+                {association:'characters'}
+            ],
+            ...req.body,
+            image:req.file.filename,
+            characters : req.body.characters
+        })
         .then(movie => {
-            const image = req.file;
-            console.log(image);
             return res.status(200).json({
                 data:movie,
                 status:200,
@@ -101,9 +99,10 @@ let moviesController = {
         })
         .then((response)=>{
             return res.status(200).json({
-                
-            })
-        })
+                deleted: 'pelicula borrada',
+                status:200
+            });
+        });
 
     }
 }
