@@ -12,6 +12,9 @@ router.get('/:id', controller.detail);
 // Creacion de personajes
 router.post('/', upload.single('image') ,controller.create);
 
+// Edicion del personaje
+//router.put('/:id', upload.single('image') ,controller.edit);
+
 // Eliminacion de personajes
 router.delete('/:id',controller.delete)
 

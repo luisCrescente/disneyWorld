@@ -15,6 +15,9 @@ router.get('/:id', controller.detail);
 // Creacion de peliculas
 router.post('/', upload.single('image') ,controller.create);
 
+// Edicion de la pelicula
+router.put('/:id', upload.single('image') ,controller.edit);
+
 // Eliminacion de pelicula
 router.delete('/:id',controller.delete)
 

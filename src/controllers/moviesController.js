@@ -73,6 +73,40 @@ let moviesController = {
             };
     },
 
+
+     /***** Edicion de pelicula  *****/
+
+        edit: async (req, res) =>{
+
+            db.Movies.findByPk(  req.params.id,{title, release_date, rating, image, genres} = req.body ,{include: [
+                {association: 'genres'}
+            ]})
+                .then(movie =>{
+
+                    delete movie.dataValues.genre_id; 
+                    let image 
+
+                    if( !req.file || !movie.image ){
+                        image = 'noImage.jpg';
+                    } else {
+                        image = req.file.filename;
+                    };
+                    movie.update({
+                        title,
+                        release_date,
+                        rating,
+                        image,
+                        genres
+                    })
+                    res.status(200).json({
+                        data: movie,
+                        edited: 'pelicula editada',
+                        status:200,
+                    })
+                }).catch(error=>console.log(error))   
+        },
+
+    
     create: (req,res) =>{
         db.Movies.create({
                 inlcude:[
