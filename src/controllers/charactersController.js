@@ -82,8 +82,10 @@ let charactersController = {
     /***** Editar un personaje *****/
 
             edit: async (req, res) =>{
+                
+                const {name, history, weight, age, image}  = req.body;
 
-                db.Characters.findByPk(  req.params.id,{name, history, weight, age, image}  = req.body,{ include: [
+                db.Characters.findByPk(  req.params.id,{ include: [
                         {association: 'movies'}
                 ]})
                     .then(character =>{
