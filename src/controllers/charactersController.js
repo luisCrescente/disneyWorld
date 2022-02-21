@@ -5,7 +5,7 @@ const Op = db.Sequelize.Op
 
 let charactersController = {
 
-      /***** Busca todas los personaje *****/
+    /***** Busca todas los personaje *****/
     
     list: async (req, res) =>{
         let allCharacters = await db.Characters.findAll()
@@ -28,7 +28,7 @@ let charactersController = {
     },
 
 
-        /***** Busca un personaje por su ID *****/
+    /***** Busca un personaje por su ID *****/
 
         detail: async (req, res) =>{
             let oneCharacter = await db.Characters.findByPk(req.params.id,{
@@ -47,6 +47,7 @@ let charactersController = {
                     name: oneCharacter.dataValues.name,
                     history: oneCharacter.dataValues.history,
                     age: oneCharacter.dataValues.age,
+                    weight: oneCharacter.weight,
                     movies: movies,
                     image: `http://localhost:3005/img/charactersImg/${oneCharacter.dataValues.image}`
                 }
@@ -58,7 +59,7 @@ let charactersController = {
         },
 
 
-           /***** Creacion de un personaje *****/
+    /***** Creacion de un personaje *****/
         
         create: (req, res) =>{
             db.Characters.create({
@@ -78,7 +79,41 @@ let charactersController = {
         },
 
 
-         /***** Elimina un personaje *****/
+    /***** Editar un personaje *****/
+
+            edit: async (req, res) =>{
+
+                db.Characters.findByPk(  req.params.id,{name, history, weight, age, image}  = req.body,{ include: [
+                        {association: 'movies'}
+                ]})
+                    .then(character =>{
+                        let image
+
+                        if( !req.file || !character.image ){
+                            image = 'noImage.jpg';
+                        } else {
+                            image = req.file.filename;
+                        };
+
+                        character.update({
+                            name,
+                            history,
+                            weight,
+                            age,
+                            image,
+                        })
+                        res.status(200).json({
+                            data: character,
+                            edited: 'personaje editada',
+                            status:200,
+                        })  
+
+                    }).catch(error=>console.log(error))   
+
+            },
+
+
+    /***** Elimina un personaje *****/
         
         delete:(req, res) =>{
             db.Movies.destroy({

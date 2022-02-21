@@ -78,12 +78,11 @@ let moviesController = {
 
         edit: async (req, res) =>{
 
-            db.Movies.findByPk(  req.params.id,{title, release_date, rating, image, genres} = req.body ,{include: [
+            db.Movies.findByPk(  req.params.id,{title, release_date, rating, image, genre_id} = req.body ,{include: [
                 {association: 'genres'}
             ]})
                 .then(movie =>{
 
-                    delete movie.dataValues.genre_id; 
                     let image 
 
                     if( !req.file || !movie.image ){
@@ -96,7 +95,7 @@ let moviesController = {
                         release_date,
                         rating,
                         image,
-                        genres
+                        genre_id
                     })
                     res.status(200).json({
                         data: movie,
