@@ -20,10 +20,12 @@ app.use(express.json());
     const moviesRoutes = require('./routes/movies');
     const charactersRoutes = require('../src/routes/characters');
     const genresRoutes = require('../src/routes/genres'); 
+    const userRoutes = require('../src/routes/user')
 
     app.use('/movies', moviesRoutes);
     app.use('/characters',charactersRoutes);
     app.use('/genres',genresRoutes);
+    app.use('auth', userRoutes);
 
 
 /* configuración del puerto*/
