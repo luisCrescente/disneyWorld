@@ -92,11 +92,11 @@ DEFAULT CHARACTER SET = utf8;
 -- Table `disney_world`.`users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `disney_world`.`users` (
-  `idusers` INT NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL DEFAULT NULL,
   `email` VARCHAR(45) NULL DEFAULT NULL,
   `password` VARCHAR(255) NULL,
-  PRIMARY KEY (`idusers`))
+  PRIMARY KEY (`id`))
 ENGINE = InnoDB;
 
 

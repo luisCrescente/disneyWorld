@@ -25,7 +25,7 @@ app.use(express.json());
     app.use('/movies', moviesRoutes);
     app.use('/characters',charactersRoutes);
     app.use('/genres',genresRoutes);
-    app.use('auth', userRoutes);
+    app.use('/auth', userRoutes);
 
 
 /* configuración del puerto*/

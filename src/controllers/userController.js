@@ -6,32 +6,25 @@ let userController = {
 
     /***** Registro de usuario *****/
 
-    register: async (req, res) =>{
-        const {to, subject, text, html, sadboxMode = false} = req.body;
-
-        const msg = {
-            to,
-            from: 'ponermail',
-            subject,
-            text,
-            html,
-            settings:{
-                sandbox_mode:{
-                    enable: sadboxMode
-                }
-            }
-        };
-        try{
-            await sgMail.send(msg);
-        }catch (err) {
-            return res.status(err.code).send(
-                err.message
-            )};
+    register: (req, res) =>{
+        
+            db.User.create({                                    
+                name: req.body.name,
+                email: req.body.email,
+                password: bcrypt.hashSync(req.body.password, 10),            
+            })
+            .then(user => {
+                return  res.status(200).json({
+                data: user,
+                created: 'usuario creado',
+                status:200,
+            })
+        }).catch(error=>console.log(error))
     },
 
-    login: async (req, res) =>{
+    // login: async (req, res) =>{
         
-    }
+    // }
 
 }
 

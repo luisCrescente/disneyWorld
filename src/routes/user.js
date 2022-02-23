@@ -4,10 +4,10 @@ const sgMail = require('../services/sendGrid')
 const controller = require('../controllers/userController');
 
 // 
-router.post('auth/register',controller.register);
+router.post('/register',controller.register);
 
 //
-router.post('auth/login',controller.login);
+// router.post('auth/login',controller.login);
 
 //
 
