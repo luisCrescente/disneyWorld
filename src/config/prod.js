@@ -1,5 +1,5 @@
-const prodConfig ={
-    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY
-};
+// const prodConfig ={
+//     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY
+// };
 
-module.exports = prodConfig;
+// module.exports = prodConfig;
