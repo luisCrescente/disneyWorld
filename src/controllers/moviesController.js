@@ -8,10 +8,7 @@ let moviesController = {
 
     list: async (req,res) =>{
         let allMovies = await db.Movies.findAll({
-            include: [
-                {association: 'genres'},
-                {association: 'characters'}
-            ]
+            include: [ {association: 'genres'},  {association: 'characters'} ]
         });   
             try {
                 getMovies = allMovies.map(movie => {  
@@ -31,10 +28,7 @@ let moviesController = {
                     movies: getMovies,
                     status: 200,
                 });
-            } catch (err) {
-                console.log(err);
-        
-            };
+            } catch (err) { console.log(err) };
         },
 
     
@@ -43,10 +37,7 @@ let moviesController = {
     detail: async (req,res) =>{
 
         let oneMovie = await db.Movies.findByPk(req.params.id, {
-            include: [
-                {association: 'genres'},
-                {association: 'characters'}
-            ]
+            include: [ {association: 'genres'}, {association: 'characters'} ]
         }); 
         try{
                 delete oneMovie.dataValues.genre_id;      
@@ -54,7 +45,6 @@ let moviesController = {
                     oneMovie.characters.forEach(character => {
                     characters.push(character.dataValues.name);
                 });
-
                 let movie = {
                     id: oneMovie.id,
                     title: oneMovie.title,
@@ -68,21 +58,18 @@ let moviesController = {
                     movies: movie,
                     status: 200,
                 });
-        }catch (err) {
-                console.log(err);
-            };
+        }catch (err) { console.log(err) };
     },
 
 
-     /***** Edicion de pelicula  *****/
+     /***** Edición de pelicula  *****/
 
         edit: async (req, res) =>{
 
-            db.Movies.findByPk(  req.params.id,{title, release_date, rating, image, genre_id} = req.body ,{include: [
-                {association: 'genres'}
-            ]})
+            db.Movies.findByPk(  req.params.id,{title, release_date, rating, image, genre_id} = req.body ,{
+                include: [ { association: 'characters'}, {association: 'genres'} ]
+                })
                 .then(movie =>{
-
                     let image 
 
                     if( !req.file || !movie.image ){
@@ -105,24 +92,42 @@ let moviesController = {
                 }).catch(error=>console.log(error))   
         },
 
-    
-    create: (req,res) =>{
-        db.Movies.create({
-                inlcude:[
-                {association:'characters'}
-            ],
-            ...req.body,
-            image:req.file.filename,
-            characters : req.body.characters
-        })
-        .then(movie => {
-            return res.status(200).json({
-                data:movie,
-                status:200,
-                created:'ok'
+
+    /***** Creación de pelicula  *****/
+
+    create: (req,res) =>{ 
+        try {
+            db.Movies.findOne({
+                where:{
+                    title: req.body.title,
+                }
             })
-        }).catch(error=>console.log(error))
+            .then( movie =>{
+                if (movie){
+                    return res.status(400).json({
+                        movie: 'la pelicula ya existe',
+                        error: 400,
+                    })
+                }else {
+                    db.Movies.create({
+                        inlcude: [{association: 'characters' },{association: 'genres' }],
+                            ...req.body,
+                            image: req.file.filename,
+                        })
+                        .then(movie => {
+                            return res.status(200).json({
+                                data: movie,
+                                status: 200,
+                                created: 'pelicula creada '
+                            })
+                        }).catch(error => console.log(error));
+                }
+            }).catch(error => console.log(error));
+        } catch (error) { console.log(error) };
     },
+
+
+    /***** Eliminación de pelicula  *****/
 
     delete:(req,res)=>{
         db.Movies.destroy({
@@ -136,8 +141,7 @@ let moviesController = {
                 deleted: 'pelicula borrada',
                 status:200
             });
-        });
-
+        }).catch(error=>console.log(error));
     }
 }
 

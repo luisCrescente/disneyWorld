@@ -9,9 +9,7 @@ let genresController = {
 
     list: async (req,res) =>{
         let allGenres = await db.Genre.findAll({
-            include: [
-                {association: 'movies'}
-            ]
+            include: [ {association: 'movies'} ]
         })
             try{
                 getGenres = allGenres.map(genre =>{
@@ -19,7 +17,6 @@ let genresController = {
                         id: genre.dataValues.id,
                         name: genre.dataValues.name,
                         image:`http://localhost:3005/img/genreImg/${genre.dataValues.image}`,
-
                     }
                     return genre
                 })
@@ -64,7 +61,7 @@ let genresController = {
                 status:200,
                 created: 'genero creado',
             })
-        }).catch(error=>console.log(error))
+        }).catch(error=>console.log(error));
     }
 }
 

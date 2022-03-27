@@ -7,7 +7,7 @@ module.exports = function (sequelize, dataTypes) {
             autoIncrement: true,
         },
 
-       character_id:{
+        character_id:{
             type: dataTypes.INTEGER,
             allowNull:false
         },
@@ -20,7 +20,7 @@ module.exports = function (sequelize, dataTypes) {
 
     let config ={
         tableName: 'character_movie',
-        timesTamps: false
+        timestamps: false
     };
 
     let CharacterMovie = sequelize.define(alias, cols, config);

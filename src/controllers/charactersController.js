@@ -8,7 +8,9 @@ let charactersController = {
     /***** Busca todas los personaje *****/
     
     list: async (req, res) =>{
-        let allCharacters = await db.Characters.findAll()
+        let allCharacters = await db.Characters.findAll({
+            include: [ {association: 'movies'}]
+            })
             try{
                 getCharacters = allCharacters.map( character =>{
                     character = {
@@ -32,9 +34,7 @@ let charactersController = {
 
         detail: async (req, res) =>{
             let oneCharacter = await db.Characters.findByPk(req.params.id,{
-                include:[
-                    {association: 'movies'}
-                ]
+                include:[ {association: 'movies'} ]
             });
             try{
                 let movies = [];
@@ -62,55 +62,68 @@ let charactersController = {
     /***** Creacion de un personaje *****/
         
         create: (req, res) =>{
-            db.Characters.create({
-                include:[
-                    {association: 'movies'}
-                ],
-                ...req.body,
-                image:req.file.filename,
-            })
-            .then(character =>{
-                return res.status(200).json({
-                    data: character,
-                    status:200,
-                    created: 'ok'
+            try{
+                db.Characters.findOne({
+                    where:{
+                        name: req.body.name,
+                    }
                 })
-            }).catch(error=>console.log(error))
+                .then(character =>{
+                    if(character){
+                        return res.status(400).json({
+                            character: 'el personaje ya existe',
+                            error: 400,
+                        })
+                    }else {
+                        db.Characters.create({
+                            include:[ {association: 'movies'} ],
+                            ...req.body,
+                            image:req.file.filename,
+                        })
+                        .then(character =>{
+                            return res.status(200).json({
+                                data: character,
+                                status:200,
+                                created: 'personaje creado'
+                            })
+                        }).catch(error=>console.log(error))
+                    }
+                }).catch(error=>console.log(error))
+            } catch (err) {console.log(err) }
         },
 
 
     /***** Editar un personaje *****/
 
-            edit: async (req, res) =>{
-                
-                const {name, history, weight, age, image}  = req.body;
+        edit: async (req, res) =>{
+            const {name, history, weight, age, image}  = req.body;
 
-                db.Characters.findByPk(  req.params.id,{ include: [
-                        {association: 'movies'}
-                ]})
-                    .then(character =>{
-                        let image
+            db.Characters.findByPk(  req.params.id,{ 
+                include: [ {association: 'movies'} ]
+            })
+            .then(character =>{
+                let image
 
-                        if( !req.file || !character.image ){
-                            image = 'noImage.jpg';
-                        } else {
-                            image = req.file.filename;
-                        };
+                if( !req.file || !character.image ){
+                    image = 'noImage.jpg';
+                } else {
+                    image = req.file.filename;
+                };
 
-                        character.update({
-                            name,
-                            history,
-                            weight,
-                            age,
-                            image,
-                        })
-                        res.status(200).json({
-                            data: character,
-                            edited: 'personaje editada',
-                            status:200,
-                        })  
+                character.update({
+                    name,
+                    history,
+                    weight,
+                    age,
+                    image,
+                })
+                res.status(200).json({
+                    data: character,
+                    edited: 'personaje editada',
+                    status:200,
+                })  
 
-                    }).catch(error=>console.log(error))   
+                }).catch(error=>console.log(error))   
 
             },
 
@@ -129,7 +142,7 @@ let charactersController = {
                     deleted: 'personaje borrado',
                     status:200
                 });
-            });
+            }).catch(error=>console.log(error));
         }
 
 }

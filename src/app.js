@@ -20,11 +20,13 @@ app.use(express.json());
     const moviesRoutes = require('./routes/movies');
     const charactersRoutes = require('../src/routes/characters');
     const genresRoutes = require('../src/routes/genres'); 
-    const userRoutes = require('../src/routes/user')
+    const userRoutes = require('../src/routes/user');
+    const characterMovieRoutes= require('../src/routes/characterMovie');
 
     app.use('/movies', moviesRoutes);
     app.use('/characters',charactersRoutes);
     app.use('/genres',genresRoutes);
+    app.use('/characterMovie',characterMovieRoutes);
     app.use('/auth', userRoutes);
 
 

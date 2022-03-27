@@ -39,7 +39,7 @@ let userController = {
         } catch (error) { console.log(error) }
     },
 
-    login: async (req, res) =>{
+    login: (req, res) =>{
         const {email, password} = req.body;
 
         try{
@@ -76,41 +76,3 @@ let userController = {
 }
 
 module.exports = userController;
-
-
-
-/*
-    try{
-            const user = await db.User.findOne({
-                where:{
-                    email,
-                }
-            });
-            if(user){
-                console.log(password)
-                console.log( user.password)
-            const passwordUser = await bcrypt.decrypt(password);
-                console.log(passwordUser + "arriba")
-
-                if(passwordUser === user.password){
-
-                return res.status(200).json({
-                    user: user,
-                    data0: 'Inicio de sesion',
-                    status:200,
-                })
-            }
-            else {  
-                return res.status(400).send({   
-                    data1:'contraseña incorrecta',
-                    status:400, 
-                })
-            }
-        }else{ 
-            return res.status(400).send({
-                data2: 'no se encuentra el mail',
-                data:400,
-            }) }
-        } catch(error){console.log(error)}
-    }
-*/
