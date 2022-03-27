@@ -464,6 +464,90 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "genres request",
+			"item": [
+				{
+					"name": "getAllGenres",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3005/genres",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"genres"
+							]
+						},
+						"description": "obtenemos listado de peliculas"
+					},
+					"response": []
+				},
+				{
+					"name": "getGenresById",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "localhost:3005/genres",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"genres"
+							]
+						},
+						"description": "obtenemos generos por id"
+					},
+					"response": []
+				},
+				{
+					"name": "createGenres",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "",
+									"type": "default"
+								},
+								{
+									"key": "image",
+									"value": "",
+									"type": "default"
+								}
+							]
+						},
+						"url": {
+							"raw": "localhost:3005/genres",
+							"host": [
+								"localhost"
+							],
+							"port": "3005",
+							"path": [
+								"genres"
+							]
+						},
+						"description": "creamos genereos \n\nagregar imagen al campo en form-data"
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
