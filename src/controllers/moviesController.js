@@ -105,10 +105,18 @@ let moviesController = {
             .then( movie =>{
                 if (movie){
                     return res.status(400).json({
-                        movie: 'la pelicula ya existe',
+                        msg: 'la pelicula ya existe',
                         error: 400,
                     })
                 }else {
+
+                    const image
+
+                    if(!req.file || !movie.image ){
+                        image = 'noImage.jpg';
+                    }else {
+                        image = req.file.filename;
+                    }
                     db.Movies.create({
                         inlcude: [{association: 'characters' },{association: 'genres' }],
                             ...req.body,
@@ -116,7 +124,7 @@ let moviesController = {
                         })
                         .then(movie => {
                             return res.status(200).json({
-                                data: movie,
+                                msg: movie,
                                 status: 200,
                                 created: 'pelicula creada '
                             })

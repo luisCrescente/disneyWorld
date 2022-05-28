@@ -75,6 +75,14 @@ let charactersController = {
                             error: 400,
                         })
                     }else {
+                        const image
+
+                        if( !req.file || !character.image ){
+                            image = 'noImage.jpg';
+                        } else {
+                            image = req.file.filename;
+                        };
+
                         db.Characters.create({
                             include:[ {association: 'movies'} ],
                             ...req.body,

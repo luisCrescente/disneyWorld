@@ -51,17 +51,41 @@ let genresController = {
     /***** Creacion de genero *****/
 
     create: (req,res) =>{
-        db.Genre.create({
-            ...req.body,
-            image: req.file.filename,
-        })
-        .then( genre =>{
-            return res.status(200).json({
-                data: genre,
-                status:200,
-                created: 'genero creado',
+        try{
+            db.Genres.findOne({
+                where:{
+                    name: req.body.name
+                }
             })
-        }).catch(error=>console.log(error));
+            .then(genre =>{
+                if(genre){
+                    return res.status(400).json({
+                        msg:'el genero se encuentra repetido',
+                        error:400
+                    })
+                }else{
+                    const image
+
+                    if(!req.file || !movie.image ){
+                        image = 'noImage.jpg';
+                    }else {
+                        image = req.file.filename;
+                    }
+                    db.Genres.create({
+                        include:[{ association: 'genres' }],
+                        ...req.body,
+                        image: req.file.filename
+                    })
+                    .then( genre =>{
+                        return res.status(200).json({
+                            msg: genre,
+                            created:'genero creado',
+                            status:200
+                        })
+                    }).catch(error=>console.log(error));
+                }
+            }).catch(error=>console.log(error));
+        } catch (err) { console.log(err) };
     }
 }
 
