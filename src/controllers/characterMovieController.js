@@ -5,11 +5,15 @@ let characterMovie = {
 
     create:(req,res) =>{
         db.CharacterMovie.create({
+            include:[
+                {association:'movies'},{association:'characters'}
+            ],
             ...req.body
         })
         .then( characterMovie =>{
             return res.status(200).json({
                 data:characterMovie,
+                msg:'relacion creada',
                 status:200,
             })
         }).catch(error=>console.log(error))

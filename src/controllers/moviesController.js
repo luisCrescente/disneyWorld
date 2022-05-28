@@ -66,30 +66,33 @@ let moviesController = {
 
         edit: async (req, res) =>{
 
-            db.Movies.findByPk(  req.params.id,{title, release_date, rating, image, genre_id} = req.body ,{
+            const movieEdit = await db.Movies.findByPk( req.params.id,{
                 include: [ { association: 'characters'}, {association: 'genres'} ]
                 })
-                .then(movie =>{
-                    let image 
-
-                    if( !req.file || !movie.image ){
-                        image = 'noImage.jpg';
-                    } else {
-                        image = req.file.filename;
-                    };
-                    movie.update({
-                        title,
-                        release_date,
-                        rating,
-                        image,
-                        genre_id
-                    })
-                    res.status(200).json({
-                        data: movie,
-                        edited: 'pelicula editada',
-                        status:200,
-                    })
-                }).catch(error=>console.log(error))   
+                try{
+                    if(movieEdit){
+                        movieEdit.update({
+                            title: req.body.title != undefined ? req.body.title : movieEdit.title,
+                            release_date: req.body.release_date != undefined ? req.body.release_date : movieEdit.release_date,
+                            rating: req.body.rating != undefined ? req.body.rating : movieEdit.rating,
+                            image: req.file != undefined ? req.file.filename : movieEdit.file,
+                            id_genre: req.body.id_genre != undefined ? req.body.id_genre : movieEdit.id_genre,
+                        })
+                        .then(movie=>{
+                            res.status(200).json({
+                                data:movie,
+                                msg:'personaje creado',
+                                status:200
+                            })
+                        }).catch(error => console.log(error));
+                        
+                    }else{
+                        res.status(400).json({
+                            msg:'no se encontro la pelicula',
+                            error:400
+                        })
+                    }
+                }catch (err) { console.log(err) };
         },
 
 

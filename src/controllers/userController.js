@@ -48,12 +48,12 @@ let userController = {
                     email
                 }
             })
-            .then(userToLogin =>{
-                if(userToLogin){
-                    let passwordUser = bcrypt.compareSync(password, userToLogin.password);
+            .then(user =>{
+                if(user){
+                    let passwordUser = bcrypt.compareSync(password, user.password);
                     if(passwordUser){
                         return res.status(200).json({
-                            user:'usuario logeado',
+                            msg:`Bienvenido usuario:${user.name}`,
                             status:200
                         })
                     }else {

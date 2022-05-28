@@ -104,36 +104,34 @@ let charactersController = {
     /***** Editar un personaje *****/
 
         edit: async (req, res) =>{
-            const {name, history, weight, age, image}  = req.body;
 
-            db.Characters.findByPk(  req.params.id,{ 
+            const characterEdit = await db.Characters.findByPk(  req.params.id,{ 
                 include: [ {association: 'movies'} ]
             })
-            .then(character =>{
-                let image
-
-                if( !req.file || !character.image ){
-                    image = 'noImage.jpg';
-                } else {
-                    image = req.file.filename;
-                };
-
-                character.update({
-                    name,
-                    history,
-                    weight,
-                    age,
-                    image,
-                })
-                res.status(200).json({
-                    data: character,
-                    edited: 'personaje editada',
-                    status:200,
-                })  
-
-                }).catch(error=>console.log(error))   
-
-            },
+            try{
+                if(characterEdit){
+                    characterEdit.update({
+                        name: req.body.name != undefined ? req.body.name : characterEdit.name,
+                        history: req.body.history != undefined ? req.body.history : characterEdit.history,
+                        age: req.body.age != undefined ? req.body.age : characterEdit.age,
+                        weight: req.body.weight != undefined ? req.body.weight : characterEdit.weight,
+                        image: req.file != undefined ? req.file.filename : characterEdit.file,
+                    })
+                    .then (character =>{
+                        return res.status(200).json({
+                            data: character,
+                            msg:'personaje editado',
+                            status:200
+                        })
+                    }).catch(error=>console.log(error))
+                }else{
+                    res.status(400).json({
+                        msg:'personaje no encontrado',
+                        status:400
+                    })
+                }
+            }catch (err) {console.log(err) }
+        },
 
 
     /***** Elimina un personaje *****/
