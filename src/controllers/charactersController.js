@@ -69,24 +69,12 @@ let charactersController = {
                     }
                 })
                 .then(character =>{
-                    if(character){
-                        return res.status(400).json({
-                            character: 'el personaje ya existe',
-                            error: 400,
-                        })
-                    }else {
-                        const image
-
-                        if( !req.file || !character.image ){
-                            image = 'noImage.jpg';
-                        } else {
-                            image = req.file.filename;
-                        };
+                    if(!character){
 
                         db.Characters.create({
                             include:[ {association: 'movies'} ],
                             ...req.body,
-                            image:req.file.filename,
+                            image: req.file != undefined ? req.file.filename :'noImage.jpg',
                         })
                         .then(character =>{
                             return res.status(200).json({
@@ -94,7 +82,12 @@ let charactersController = {
                                 status:200,
                                 created: 'personaje creado'
                             })
-                        }).catch(error=>console.log(error))
+                        }).catch(error=>console.log(error));
+                    }else {
+                        return res.status(400).json({
+                            character: 'el personaje ya existe',
+                            error: 400,
+                        })
                     }
                 }).catch(error=>console.log(error))
             } catch (err) {console.log(err) }

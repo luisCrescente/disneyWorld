@@ -106,32 +106,26 @@ let moviesController = {
                 }
             })
             .then( movie =>{
-                if (movie){
+                if (!movie){
+                    
+                db.Movies.create({
+                    inlcude: [{association: 'characters' },{association: 'genres' }],
+                        ...req.body,
+                        image: req.file != undefined ? req.file.filename :'noImage.jpg',
+                    })
+                    .then(movie => {
+                        return res.status(200).json({
+                            msg: movie,
+                            status: 200,
+                            created: 'pelicula creada '
+                        })
+                    }).catch(error => console.log(error));
+
+                }else {
                     return res.status(400).json({
                         msg: 'la pelicula ya existe',
                         error: 400,
                     })
-                }else {
-
-                    const image
-
-                    if(!req.file || !movie.image ){
-                        image = 'noImage.jpg';
-                    }else {
-                        image = req.file.filename;
-                    }
-                    db.Movies.create({
-                        inlcude: [{association: 'characters' },{association: 'genres' }],
-                            ...req.body,
-                            image: req.file.filename,
-                        })
-                        .then(movie => {
-                            return res.status(200).json({
-                                msg: movie,
-                                status: 200,
-                                created: 'pelicula creada '
-                            })
-                        }).catch(error => console.log(error));
                 }
             }).catch(error => console.log(error));
         } catch (error) { console.log(error) };

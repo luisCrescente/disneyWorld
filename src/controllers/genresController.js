@@ -64,17 +64,11 @@ let genresController = {
                         error:400
                     })
                 }else{
-                    const image
 
-                    if(!req.file || !movie.image ){
-                        image = 'noImage.jpg';
-                    }else {
-                        image = req.file.filename;
-                    }
                     db.Genres.create({
                         include:[{ association: 'genres' }],
                         ...req.body,
-                        image: req.file.filename
+                        image: req.file != undefined ? req.file.filename :'noImage.jpg',
                     })
                     .then( genre =>{
                         return res.status(200).json({
