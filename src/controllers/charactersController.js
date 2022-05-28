@@ -130,19 +130,23 @@ let charactersController = {
 
     /***** Elimina un personaje *****/
         
-        delete:(req, res) =>{
-            db.Movies.destroy({
+        delete: async (req, res) =>{
+            const characters = await db.Characters.destroy({
                 where:{
                     id:req.params.id
                 }
             })
-            .then((character) => {
-                return res.status(200).json({
-                    response: character,
-                    deleted: 'personaje borrado',
+            try{
+                characters ? 
+                    res.status(200).json({
+                    msg: 'personaje borrado',
                     status:200
-                });
-            }).catch(error=>console.log(error));
+                }) :
+                res.status(400).json({
+                msg: 'personaje no encontrado',
+                status:400
+            })
+            } catch (err) {console.log(err) }
         }
 
 }

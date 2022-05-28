@@ -16,19 +16,24 @@ let characterMovie = {
     },
     
 
-    delete: (req,res) =>{
-        db.CharacterMovie.destroy({
+        
+    delete: async (req, res) =>{
+        const charactersMovies = await db.CharacterMovie.destroy({
             where:{
-                id: req.params.id,
+                id:req.params.id
             }
         })
-        .then(characterMovie=>{
-            return res.status(200).json({
-                data:characterMovie,
-                deleted:'borrado',
+        try{
+            charactersMovies ? 
+                res.status(200).json({
+                msg: 'relacion borrado',
                 status:200
-            })
-        }).catch(error=>console.log(error));
+            }) :
+            res.status(400).json({
+            msg: 'relacion no encontrado',
+            status:400
+        })
+        } catch (err) {console.log(err) }
     }
 
 }

@@ -129,19 +129,23 @@ let moviesController = {
 
     /***** Eliminación de pelicula  *****/
 
-    delete:(req,res)=>{
-        db.Movies.destroy({
+    delete:async (req,res)=>{
+        const movies = await db.Movies.destroy({
             where: {
                 id: req.params.id
             }
         })
-        .then((movie)=>{
-            return res.status(200).json({
-                response: movie,
-                deleted: 'pelicula borrada',
-                status:200
-            });
-        }).catch(error=>console.log(error));
+        try{
+            movies ?
+                res.status(200).json({
+                    msg: 'pelicula borrado',
+                    status: 200,
+                }) :
+                res.status(400).json({
+                    msg: "pelicula no encontrada",
+                    status: 400
+                })
+        }catch (error) { console.log(error) }
     }
 }
 
