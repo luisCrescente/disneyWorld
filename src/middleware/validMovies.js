@@ -4,9 +4,8 @@ const db = require('../database/models');
 
 module.exports = [
     body('title')
-        .isEmpty()
-        .withMessage('El campo esta vacio')
-        .bail(),
+        .notEmpty()
+        .withMessage('El campo esta vacio'),
 
 
     body('rating')
@@ -25,7 +24,7 @@ module.exports = [
         .withMessage("Debe ser un Número"),
 
     
-        body("release_date")
+    body("release_date")
         .notEmpty()
         .withMessage("Requerido")
         .bail()

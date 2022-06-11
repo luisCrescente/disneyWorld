@@ -11,10 +11,12 @@ let moviesController = {
         let allMovies = await db.Movies.findAll({
             include: [ {association: 'genres'},  {association: 'characters'} ],
             where:{
-                title: { [Op.substring]:req.query.title ? req.query.title : '' }
-            },
-
-            order:[ ['title', req.query.order && req.query.order.ToupperCase() == 'DESC' ? req.query.order : 'ASC'] ]
+                title: { 
+                    [Op.substring]:req.query.title ? req.query.title : '' },
+                    
+                order:[ 
+                    ['title', req.query.order && req.query.order.ToupperCase() == 'DESC' ? req.query.order : 'ASC'] ]
+            }
         });   
             try {
                 if(allMovies.length > 0){
@@ -102,14 +104,14 @@ let moviesController = {
                         .then(movie=>{
                             res.status(200).json({
                                 data:movie,
-                                msg:'personaje creado',
+                                msg:'Pelicula editada',
                                 status:200
                             })
                         }).catch(error => console.log(error));
                         
                     }else{
                         res.status(400).json({
-                            msg:'no se encontro la pelicula',
+                            msg:'No se encontro la pelicula',
                             error:400
                         })
                     }
@@ -150,7 +152,8 @@ let moviesController = {
                             })
                         }).catch(error => console.log(error));
                     }
-                })
+                }).catch(error=>console.log(error))
+                
             } catch (error) { console.log(error) };
         }else {
             let error = {
@@ -173,11 +176,11 @@ let moviesController = {
         try{
             movies ?
                 res.status(200).json({
-                    msg: 'pelicula borrado',
+                    msg: 'Pelicula borrado',
                     status: 200,
                 }) :
                 res.status(400).json({
-                    msg: "pelicula no encontrada",
+                    msg: "Pelicula no encontrada",
                     status: 400
                 })
         }catch (error) { console.log(error) }

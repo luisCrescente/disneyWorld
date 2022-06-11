@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../controllers/charactersController');
 const upload = require('../middleware/characterImg');
+const valiCharacter = require('../middleware/validCharacter');
 
 
 router.get('/',controller.list);
@@ -10,7 +11,7 @@ router.get('/',controller.list);
 router.get('/:id', controller.detail);
 
 // Creacion de personajes
-router.post('/', upload.single('image') ,controller.create);
+router.post('/', upload.single('image'), valiCharacter ,controller.create);
 
 // Edicion del personaje
 router.put('/:id', upload.single('image') ,controller.edit);
