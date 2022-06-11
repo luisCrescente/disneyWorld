@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const controller = require('../controllers/moviesController');
-const path = require('path')
 const upload = require('../middleware/moviesImg');
+const validMovie = require('../middleware/validMovies');
 
 
 
@@ -13,7 +14,7 @@ router.get('/',controller.list);
 router.get('/:id', controller.detail);
 
 // Creacion de peliculas
-router.post('/', upload.single('image') ,controller.create);
+router.post('/', upload.single('image'), validMovie ,controller.create);
 
 // Edicion de la pelicula
 router.put('/:id', upload.single('image') ,controller.edit);

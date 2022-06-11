@@ -1,5 +1,6 @@
-let db = require('../database/models')
-const path = require('path');
+let db = require('../database/models');
+const { Op } = require("sequelize");
+const {validationResult} = require('express-validator');
 
 
 let moviesController = {
@@ -8,26 +9,38 @@ let moviesController = {
 
     list: async (req,res) =>{
         let allMovies = await db.Movies.findAll({
-            include: [ {association: 'genres'},  {association: 'characters'} ]
+            include: [ {association: 'genres'},  {association: 'characters'} ],
+            where:{
+                title: { [Op.substring]:req.query.title ? req.query.title : '' }
+            },
+
+            order:[ ['title', req.query.order && req.query.order.ToupperCase() == 'DESC' ? req.query.order : 'ASC'] ]
         });   
             try {
-                getMovies = allMovies.map(movie => {  
-                    movie = {
-                        //id: movie.dataValues.id,
-                        title: movie.dataValues.title,
-                        release_date: movie.dataValues.release_date,
-                        //rating: movie.dataValues.rating,
-                        //genres: movie.genres.dataValues.name,
-                        //characters:characters
-                        image:`http://localhost:3005/img/moviesImg/${movie.dataValues.image}`
-                    };
-                    return movie;
-                });
-                res.status(200).json({
-                    //totalMovies: getMovies.length,
-                    movies: getMovies,
-                    status: 200,
-                });
+                if(allMovies.length > 0){
+                    getMovies = allMovies.map(movie => {  
+                        movie = {
+                            //id: movie.dataValues.id,
+                            title: movie.dataValues.title,
+                            release_date: movie.dataValues.release_date,
+                            //rating: movie.dataValues.rating,
+                            //genres: movie.genres.dataValues.name,
+                            //characters:characters
+                            image:`http://localhost:3005/img/moviesImg/${movie.dataValues.image}`
+                        };
+                        return movie;
+                    });
+                    res.status(200).json({
+                        //totalMovies: getMovies.length,
+                        movies: getMovies,
+                        status: 200,
+                    });
+                }else {
+                    res.status(400).json({
+                        msg: 'No hay peliculas en la base de datos',
+                        error:400
+                    })
+                }
             } catch (err) { console.log(err) };
         },
 
@@ -39,7 +52,8 @@ let moviesController = {
         let oneMovie = await db.Movies.findByPk(req.params.id, {
             include: [ {association: 'genres'}, {association: 'characters'} ]
         }); 
-        try{
+        try{    
+            if(oneMovie){
                 delete oneMovie.dataValues.genre_id;      
                 let characters = [];                
                     oneMovie.characters.forEach(character => {
@@ -58,6 +72,13 @@ let moviesController = {
                     movies: movie,
                     status: 200,
                 });
+            }else {
+                return res.status(400).json({
+                    msg:'No se encontro la pelicula',
+                    error: 400
+                })
+            }
+
         }catch (err) { console.log(err) };
     },
 
@@ -99,36 +120,45 @@ let moviesController = {
     /***** Creación de pelicula  *****/
 
     create: (req,res) =>{ 
-        try {
-            db.Movies.findOne({
-                where:{
-                    title: req.body.title,
-                }
-            })
-            .then( movie =>{
-                if (!movie){
-                    
-                db.Movies.create({
-                    inlcude: [{association: 'characters' },{association: 'genres' }],
-                        ...req.body,
-                        image: req.file != undefined ? req.file.filename :'noImage.jpg',
-                    })
-                    .then(movie => {
-                        return res.status(200).json({
-                            msg: movie,
-                            status: 200,
-                            created: 'pelicula creada '
-                        })
-                    }).catch(error => console.log(error));
+        let errors = validationResult(req);
+        if (errors.isEmpty()){
+            let {title, rating, release_date, genre_id} = req.body;
 
-                }else {
-                    return res.status(400).json({
-                        msg: 'la pelicula ya existe',
-                        error: 400,
-                    })
-                }
-            }).catch(error => console.log(error));
-        } catch (error) { console.log(error) };
+            try {
+                db.Movies.findOne({
+                    where:{
+                        title:req.body.title,
+                    }
+                })
+                .then (movie => {
+                    if(movie){
+                        return res.status(400).json({
+                            msg: 'La pelicula ya existe',
+                            error:400
+                        })
+                    } else {
+                        db.Movies.create({
+                            inlcude: [{association: 'characters' },{association: 'genres' }],
+                            ...req.body,
+                            image: req.file != undefined ? req.file.filename :'noImage.jpg',
+                        })
+                        .then (movie =>{
+                            return res.status(200).json({
+                                msng: movie,
+                                created: 'Pelicula creada',
+                                status:200
+                            })
+                        }).catch(error => console.log(error));
+                    }
+                })
+            } catch (error) { console.log(error) };
+        }else {
+            let error = {
+                status: 400,
+                errors:  errors.mapped(),
+            };
+            res.status(400).json(error);
+        }
     },
 
 
