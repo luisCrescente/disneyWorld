@@ -1,5 +1,8 @@
+require('dotenv').config();
+
 let db = require('../database/models');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken')
 
 
 let userController = {
@@ -52,8 +55,18 @@ let userController = {
                 if(user){
                     let passwordUser = bcrypt.compareSync(password, user.password);
                     if(passwordUser){
+                        const expireToken = 420;
+                            const token = jwt.sign({
+                                data: email
+                            }, 
+                            process.env. JWT_KEY, 
+                            {
+                                expiresIn: expireToken
+                            })
                         return res.status(200).json({
                             msg:`Bienvenido usuario:${user.name}`,
+                            time: `El token expira en ${expireToken/60} min`,
+                            token:token,
                             status:200
                         })
                     }else {
